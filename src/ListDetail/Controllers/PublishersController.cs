@@ -33,7 +33,10 @@ namespace ListDetail.Controllers
                 return NotFound();
             }
 
-            var publisher = await _context.Publisher.SingleOrDefaultAsync(m => m.Id == id);
+            var publisher = await _context.Publisher
+                .Include(b => b.Book)
+                .SingleOrDefaultAsync(m => m.Id == id);
+
             if (publisher == null)
             {
                 return NotFound();
