@@ -23,7 +23,8 @@ namespace ListDetail.Controllers
         public async Task<IActionResult> Index()
         {
             Prefecture.Initialize(_context);
-            var applicationDbContext = _context.Book.Include(b => b.Author);
+            var applicationDbContext = _context.Book.Include(b => b.Author)
+                .Include(b => b.Publisher);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +36,9 @@ namespace ListDetail.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Book.SingleOrDefaultAsync(m => m.Id == id);
+            var book = await _context.Book.Include(b => b.Author)
+                .Include(b => b.Publisher)
+                .SingleOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
                 return NotFound();
