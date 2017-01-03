@@ -34,7 +34,11 @@ namespace ListDetail.Controllers
                 return NotFound();
             }
 
-            var author = await _context.Author.SingleOrDefaultAsync(m => m.Id == id);
+            var author = await _context.Author
+                .Include(a => a.Prefecture)
+                .Include(a => a.Book)
+                .SingleOrDefaultAsync(m => m.Id == id);
+
             if (author == null)
             {
                 return NotFound();
