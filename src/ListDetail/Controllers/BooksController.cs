@@ -20,12 +20,46 @@ namespace ListDetail.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, string search)
         {
-            Prefecture.Initialize(_context);
-            var applicationDbContext = _context.Book.Include(b => b.Author)
+            if (page == null)
+            {
+                page = 0;
+            }
+
+            int max = 5;
+
+            var books = from m in _context.Book select m;
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                books = books.Where(b => b.Title.Contains(search));
+            }
+
+            books = books
+                .Skip(max * page.Value)
+                .Take(max)
+                .Include(b => b.Author)
                 .Include(b => b.Publisher);
-            return View(await applicationDbContext.ToListAsync());
+
+            if (page.Value > 0)
+            {
+                ViewData["prev"] = page.Value - 1;
+            }
+
+            if (books.Count() >= max)
+            {
+                ViewData["next"] = page.Value + 1;
+
+                if (_context.Book.Skip(max * (page.Value + 1)).Take(max).Any())
+                {
+                    ViewData["next"] = null;
+                }
+            }
+
+            ViewData["search"] = search;
+
+            return View(await books.ToListAsync());
         }
 
         // GET: Books/Details/5
