@@ -96,7 +96,7 @@ namespace ListDetail.Data.Migrations
 
                     b.Property<DateTime?>("PublishDate");
 
-                    b.Property<int?>("PublisherId");
+                    b.Property<int>("PublisherId");
 
                     b.Property<string>("Title");
 
@@ -257,7 +257,8 @@ namespace ListDetail.Data.Migrations
 
                     b.HasOne("ListDetail.Models.Publisher", "Publisher")
                         .WithMany("Book")
-                        .HasForeignKey("PublisherId");
+                        .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

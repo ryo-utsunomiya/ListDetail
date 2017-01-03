@@ -15,6 +15,8 @@ namespace ListDetail.Models
 
         public int AuthorId { get; set; }
 
+        public int PublisherId { get; set; }
+
         [Display(Name = "価格")]
         public int Price { get; set; }
 

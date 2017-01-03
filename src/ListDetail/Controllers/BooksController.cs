@@ -50,7 +50,8 @@ namespace ListDetail.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "Id", "Id");
+            ViewData["AuthorId"] = new SelectList(_context.Author, "Id", "Id");
+            ViewData["PublisherId"] = new SelectList(_context.Publisher, "Id", "Id");
             return View();
         }
 
@@ -59,7 +60,7 @@ namespace ListDetail.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AuthorId,ISBN,Price,PublishDate,Title")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,AuthorId,ISBN,Price,PublishDate,PublisherId,Title")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +68,8 @@ namespace ListDetail.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "Id", "Id", book.AuthorId);
+            ViewData["AuthorId"] = new SelectList(_context.Author, "Id", "Id", book.AuthorId);
+            ViewData["PublisherId"] = new SelectList(_context.Publisher, "Id", "Id", book.PublisherId);
             return View(book);
         }
 
@@ -84,7 +86,8 @@ namespace ListDetail.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "Id", "Id", book.AuthorId);
+            ViewData["AuthorId"] = new SelectList(_context.Author, "Id", "Id", book.AuthorId);
+            ViewData["PublisherId"] = new SelectList(_context.Publisher, "Id", "Id", book.PublisherId);
             return View(book);
         }
 
@@ -93,7 +96,7 @@ namespace ListDetail.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AuthorId,ISBN,Price,PublishDate,Title")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,AuthorId,ISBN,Price,PublishDate,PublisherId,Title")] Book book)
         {
             if (id != book.Id)
             {
@@ -120,7 +123,8 @@ namespace ListDetail.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "Id", "Id", book.AuthorId);
+            ViewData["AuthorId"] = new SelectList(_context.Author, "Id", "Id", book.AuthorId);
+            ViewData["PublisherId"] = new SelectList(_context.Publisher, "Id", "Id", book.PublisherId);
             return View(book);
         }
 
